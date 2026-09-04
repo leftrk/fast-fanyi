@@ -50,7 +50,7 @@ struct ContentView: View {
                         .font(.system(size: 16))
                         .foregroundStyle(.tertiary)
                         .padding(.horizontal, 13)
-                        .padding(.vertical, 16)
+                        .padding(.vertical, 11)
                         .allowsHitTesting(false)
                 }
             }
