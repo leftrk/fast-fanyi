@@ -57,7 +57,7 @@ struct ContentView: View {
                 Button("清空") {
                     input = ""
                     output = ""
-                    statusLine = idleHint
+                    statusLine = modelState == .ready ? idleHint : statusLine
                 }
                 .controlSize(.small)
                 .disabled(input.isEmpty && output.isEmpty)
@@ -82,8 +82,9 @@ struct ContentView: View {
                     .frame(minWidth: 240)
 
                 ScrollView {
-                    Text(output.isEmpty ? " " : output)
+                    Text(output.isEmpty && modelState == .missing ? downloadGuide : (output.isEmpty ? " " : output))
                         .font(.system(size: 16))
+                        .foregroundStyle(output.isEmpty ? .secondary : .primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .textSelection(.enabled)
                         .padding(12)
@@ -131,8 +132,21 @@ struct ContentView: View {
             }
         } else {
             modelState = .missing
-            statusLine = "中英翻译模型未下载，点右侧按钮下载（约 300MB，下载一次永久离线可用）"
+            statusLine = "中英翻译模型未下载，下载方式见右侧"
         }
+    }
+
+    /// 模型缺失时显示在输出区的下载指引
+    private var downloadGuide: String {
+        """
+        尚未下载中英翻译模型，两种方式任选：
+
+        方式一（推荐）：点上方「下载翻译模型」，按系统弹窗提示下载
+
+        方式二（手动）：系统设置 → 通用 → 语言与地区 → 翻译语言，下载「中文（普通话）」和「英语（美国）」
+
+        模型约 300MB，下载一次即可永久离线使用。
+        """
     }
 
     private func startModelDownload() {

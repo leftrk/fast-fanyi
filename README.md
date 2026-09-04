@@ -1,5 +1,7 @@
 # fast-fanyi 翻译
 
+<p><img src="assets/icon.png" width="128" alt="fast-fanyi icon"></p>
+
 macOS 快速中英互译工具：粘贴即译，端侧离线。
 
 A fast Chinese ⇄ English translator for macOS. Paste text, get instant translation — fully on-device and offline.
