@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- fast-fanyi 图标：企业孟菲斯风格（扁平亮色 + 几何装饰），主体 A→Z 叠放气泡 -->
+  <!-- fast-fanyi 图标：纯白底 + A→Z 叠放对话气泡 -->
   <defs>
     <clipPath id="squircle">
       <rect x="20" y="20" width="984" height="984" rx="230"/>
@@ -7,45 +7,25 @@
   </defs>
 
   <g clip-path="url(#squircle)">
-    <!-- 奶油底 -->
-    <rect x="20" y="20" width="984" height="984" rx="230" fill="#FFF2E0"/>
+    <!-- 纯白底 -->
+    <rect x="20" y="20" width="984" height="984" rx="230" fill="#FFFFFF"/>
 
-    <!-- 装饰：左上珊瑚大圆 -->
-    <circle cx="110" cy="110" r="170" fill="#FF6B5B"/>
-    <!-- 装饰：右下明黄大圆 -->
-    <circle cx="960" cy="960" r="165" fill="#FFC93D"/>
-    <!-- 装饰：右上藏蓝锯齿波浪线 -->
-    <polyline points="650,150 692,82 734,150 776,82 818,150 860,82 902,150"
-              fill="none" stroke="#1C1C3D" stroke-width="22"
-              stroke-linecap="round" stroke-linejoin="round"/>
-    <!-- 装饰：左上明黄十字 -->
-    <g stroke="#FFC93D" stroke-width="20" stroke-linecap="round">
-      <line x1="330" y1="70" x2="330" y2="150"/>
-      <line x1="290" y1="110" x2="370" y2="110"/>
-    </g>
-    <!-- 装饰：右侧珊瑚圆环 -->
-    <circle cx="885" cy="615" r="52" fill="none" stroke="#FF6B5B" stroke-width="20"/>
-    <!-- 装饰：左下亮蓝圆点阵 3x3 -->
-    <g fill="#2E5BF5">
-      <circle cx="102" cy="838" r="13"/><circle cx="154" cy="838" r="13"/><circle cx="206" cy="838" r="13"/>
-      <circle cx="102" cy="890" r="13"/><circle cx="154" cy="890" r="13"/><circle cx="206" cy="890" r="13"/>
-      <circle cx="102" cy="942" r="13"/><circle cx="154" cy="942" r="13"/><circle cx="206" cy="942" r="13"/>
-    </g>
+    <g transform="translate(-8 -30)">
+      <!-- 气泡 A：亮蓝，左下，微左倾 -->
+      <g transform="rotate(-6 385 565)">
+        <polygon points="340,684 295,782 415,690" fill="#2E5BF5" stroke="#1C1C3D" stroke-width="14" stroke-linejoin="round"/>
+        <rect x="230" y="440" width="310" height="250" rx="44" fill="#2E5BF5" stroke="#1C1C3D" stroke-width="14"/>
+        <text x="385" y="575" font-family="Helvetica Neue, Arial, sans-serif" font-weight="900"
+              font-size="155" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">A</text>
+      </g>
 
-    <!-- 气泡 A：亮蓝，左下，微左倾 -->
-    <g transform="rotate(-6 385 565)">
-      <polygon points="340,684 295,782 415,690" fill="#2E5BF5" stroke="#1C1C3D" stroke-width="14" stroke-linejoin="round"/>
-      <rect x="230" y="440" width="310" height="250" rx="44" fill="#2E5BF5" stroke="#1C1C3D" stroke-width="14"/>
-      <text x="385" y="575" font-family="Helvetica Neue, Arial, sans-serif" font-weight="900"
-            font-size="155" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">A</text>
-    </g>
-
-    <!-- 气泡 Z：珊瑚橙，右上，微右倾，压在 A 上 -->
-    <g transform="rotate(6 655 465)">
-      <polygon points="610,584 725,672 660,590" fill="#FF6B5B" stroke="#1C1C3D" stroke-width="14" stroke-linejoin="round"/>
-      <rect x="500" y="340" width="310" height="250" rx="44" fill="#FF6B5B" stroke="#1C1C3D" stroke-width="14"/>
-      <text x="655" y="475" font-family="Helvetica Neue, Arial, sans-serif" font-weight="900"
-            font-size="155" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">Z</text>
+      <!-- 气泡 Z：珊瑚橙，右上，微右倾，压在 A 上 -->
+      <g transform="rotate(6 655 465)">
+        <polygon points="610,584 725,672 660,590" fill="#FF6B5B" stroke="#1C1C3D" stroke-width="14" stroke-linejoin="round"/>
+        <rect x="500" y="340" width="310" height="250" rx="44" fill="#FF6B5B" stroke="#1C1C3D" stroke-width="14"/>
+        <text x="655" y="475" font-family="Helvetica Neue, Arial, sans-serif" font-weight="900"
+              font-size="155" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">Z</text>
+      </g>
     </g>
   </g>
 </svg>
