@@ -38,58 +38,83 @@ struct ContentView: View {
     private let idleHint = "粘贴或输入中文/英文，自动互译"
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 8) {
-                Circle()
-                    .fill(statusColor)
-                    .frame(width: 8, height: 8)
-                Text(statusLine)
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                if modelState == .missing {
-                    Button("下载翻译模型") { startModelDownload() }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
-                    Button("打开系统设置") { openSystemSettings() }
-                        .controlSize(.small)
-                }
-                Button("清空") {
-                    input = ""
-                    output = ""
-                    statusLine = modelState == .ready ? idleHint : statusLine
-                }
-                .controlSize(.small)
-                .disabled(input.isEmpty && output.isEmpty)
-                Button("复制译文") {
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(output, forType: .string)
-                }
-                .controlSize(.small)
-                .disabled(output.isEmpty)
-                .keyboardShortcut("c", modifiers: [.command, .shift])
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-
-            Divider()
-
-            HSplitView {
+        HSplitView {
+            // 左：输入框（占位提示 + 右下角清空按钮）
+            ZStack(alignment: .topLeading) {
                 TextEditor(text: $input)
                     .font(.system(size: 16))
                     .scrollContentBackground(.hidden)
                     .padding(8)
-                    .frame(minWidth: 240)
-
-                ScrollView {
-                    Text(output.isEmpty && modelState == .missing ? downloadGuide : (output.isEmpty ? " " : output))
+                if input.isEmpty {
+                    Text(idleHint)
                         .font(.system(size: 16))
-                        .foregroundStyle(output.isEmpty ? .secondary : .primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .textSelection(.enabled)
-                        .padding(12)
+                        .foregroundStyle(.tertiary)
+                        .padding(.horizontal, 13)
+                        .padding(.vertical, 16)
+                        .allowsHitTesting(false)
                 }
-                .frame(minWidth: 240)
+            }
+            .frame(minWidth: 240)
+            .overlay(alignment: .bottomTrailing) {
+                if !input.isEmpty {
+                    Button {
+                        input = ""
+                        output = ""
+                        statusLine = modelState == .ready ? "" : statusLine
+                    } label: {
+                        Image(systemName: "eraser")
+                    }
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(.secondary)
+                    .padding(10)
+                    .help("清空")
+                }
+            }
+
+            // 右：输出框（左下角状态文字，右下角复制按钮，模型缺失时露出下载按钮）
+            ScrollView {
+                Text(output.isEmpty && modelState == .missing ? downloadGuide : (output.isEmpty ? " " : output))
+                    .font(.system(size: 16))
+                    .foregroundStyle(output.isEmpty ? .secondary : .primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .textSelection(.enabled)
+                    .padding(12)
+            }
+            .frame(minWidth: 240)
+            .overlay(alignment: .bottom) {
+                HStack(spacing: 8) {
+                    if !statusLine.isEmpty {
+                        Circle()
+                            .fill(statusColor)
+                            .frame(width: 7, height: 7)
+                        Text(statusLine)
+                            .font(.caption)
+                            .foregroundStyle(.tertiary)
+                            .lineLimit(1)
+                    }
+                    Spacer()
+                    if modelState == .missing {
+                        Button("下载翻译模型") { startModelDownload() }
+                            .buttonStyle(.borderedProminent)
+                            .controlSize(.small)
+                        Button("系统设置") { openSystemSettings() }
+                            .controlSize(.small)
+                    }
+                    if !output.isEmpty {
+                        Button {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(output, forType: .string)
+                        } label: {
+                            Image(systemName: "doc.on.doc")
+                        }
+                        .buttonStyle(.borderless)
+                        .foregroundStyle(.secondary)
+                        .help("复制译文 (⇧⌘C)")
+                        .keyboardShortcut("c", modifiers: [.command, .shift])
+                    }
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
             }
         }
         .frame(minWidth: 560, minHeight: 320)
@@ -125,14 +150,14 @@ struct ContentView: View {
 
         if zh2en == .installed && en2zh == .installed {
             modelState = .ready
-            statusLine = idleHint
+            statusLine = ""
             for (from, to) in [(zhCN, enUS), (enUS, zhCN)] {
                 let session = getSession(from: from, to: to)
                 try? await session.prepareTranslation()
             }
         } else {
             modelState = .missing
-            statusLine = "中英翻译模型未下载，下载方式见右侧"
+            statusLine = "中英翻译模型未下载，下载方式见上方说明"
         }
     }
 
@@ -141,7 +166,7 @@ struct ContentView: View {
         """
         尚未下载中英翻译模型，两种方式任选：
 
-        方式一（推荐）：点上方「下载翻译模型」，按系统弹窗提示下载
+        方式一（推荐）：点下方「下载翻译模型」，按系统弹窗提示下载
 
         方式二（手动）：系统设置 → 通用 → 语言与地区 → 翻译语言，下载「中文（普通话）」和「英语（美国）」
 
@@ -177,7 +202,7 @@ struct ContentView: View {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             output = ""
-            statusLine = modelState == .ready ? idleHint : statusLine
+            statusLine = modelState == .ready ? "" : statusLine
             return
         }
         workItem = Task {
