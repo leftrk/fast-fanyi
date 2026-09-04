@@ -18,7 +18,7 @@ open fanyi.app
 - 语种检测：Unicode 区间确定性判断（含 CJK → 中文），不要换 NLLanguageRecognizer——短文本/混排不可靠
 - 模型缺失：`LanguageAvailability.status` 检测，`.translationTask` 触发系统下载引导；输出区同时显示手动下载路径（系统设置 → 通用 → 语言与地区 → 翻译语言）
 - 会话按方向缓存在 `sessions` 字典，启动时预热双向
-- 图标：`scripts/make-icon.swift` 程序化生成（蓝渐变 squircle + 白「译」字），build.sh 自动生成 AppIcon.icns（源码更新才重新生成）
+- 图标：企业孟菲斯风格（A→Z 叠放气泡 + 扁平几何装饰，无中文）。源文件 `assets/icon.svg`，产物 `resources/AppIcon.icns` 已提交进仓库，build.sh 直接拷贝；要改图标就编辑 SVG 后跑 `scripts/render-icon.sh`（依赖 brew librsvg 的 rsvg-convert）
 
 ## 约定
 - 定位「快速翻译」，加功能前先想是否拖慢/复杂化核心路径
